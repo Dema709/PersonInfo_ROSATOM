@@ -8,6 +8,8 @@ class InsertDataWidget : public QWidget
     Q_OBJECT
 public:
     explicit InsertDataWidget(QWidget *parent = nullptr);
+private:
+    QStringList readEthnicGroups();
 
 signals:
     void firstWindow();  // Сигнал для первого окна на открытие

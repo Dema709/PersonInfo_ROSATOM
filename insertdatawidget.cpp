@@ -7,9 +7,14 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QComboBox>
 #include <QPushButton>
 
+#include <QMessageBox>
 #include <QDebug>
+#include <fstream> //readEthnicGroups
+#include <algorithm> //readEthnicGroups
+#include <stdexcept>//исключения
 
 InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 {
@@ -118,8 +123,22 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
     dataLayout->addSpacing(spacingSize);
 
     {
-        //Национальность
+        //Национальность (народность)
+        QLabel * ethnicLabel = new QLabel("Национальность");
+        dataLayout->addWidget(ethnicLabel);
+
+        QComboBox * ethnicComboBox = new QComboBox();
+        dataLayout->addWidget(ethnicComboBox);
+
+        QStringList ethnicGroups = readEthnicGroups();
+        if (ethnicGroups.empty()){
+            QMessageBox::warning(this, tr("InsertDataWidget"),
+                                 tr("readEthnicGroups() returned empty QStringList"));
+            Q_ASSERT(false);
+        }
+        ethnicComboBox->addItems(ethnicGroups);
     }
+
 
 
     //hLayout->addStretch(1);
@@ -142,4 +161,38 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 void InsertDataWidget::closePushButtonClicked(){
     this->close();
     emit firstWindow();
+}
+
+QStringList InsertDataWidget::readEthnicGroups(){
+    using namespace std;
+    ifstream fin("Ethnic_groups_in_Russia.txt");
+    if (!fin.is_open()){
+        QMessageBox::warning(this, tr("InsertDataWidget"),
+                             tr("readEthnicGroups() cannot open file"));
+        Q_ASSERT(false);
+        /*
+        std::string errorString= "InsertDataWidget::readEthnicGroups() cannot open file";
+        throw std::runtime_error(errorString);
+        */
+        /*
+        Q_ASSERT_X(false, "InsertDataWidget",
+                   "readEthnicGroups() cannot open file");
+        */
+        //abort();
+    }
+    //Не уверен, что лучше делать: продолжать ограниченную работу (например, выводу данных) или нет
+    //Плюс говорят, что в Qt исключениями обычно не пользуются.
+
+    QStringList answer;
+    string tempString;
+
+    while (getline(fin, tempString)){
+        answer += QString::fromStdString(tempString);
+    }
+
+    if (answer.size()>2){
+        sort(next(answer.begin()), prev(answer.end()));
+    }
+
+    return answer;
 }

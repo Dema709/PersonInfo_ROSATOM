@@ -32,8 +32,8 @@ DialogWidget::DialogWidget(QWidget *parent)
     insertDataWidget = new InsertDataWidget();
     displayDataWidget = new DisplayDataWidget();
 
-    insertDataWidget->resize(370,100);
-    displayDataWidget->resize(370,100);
+    //insertDataWidget->resize(370,100);
+    //displayDataWidget->resize(370,100);
 
     //Подключение отображения окна выбора действий при закрытии ввода/вывода по кнопке
     connect(insertDataWidget, &InsertDataWidget::firstWindow, this, &DialogWidget::show);

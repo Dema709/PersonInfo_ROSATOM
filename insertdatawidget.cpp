@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QRadioButton>
+#include <QSpinBox>
 #include <QPushButton>
 
 #include <QDebug>
@@ -21,6 +22,9 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 
     QVBoxLayout * dataLayout = new QVBoxLayout();
     dataGroupBox->setLayout(dataLayout);
+
+    int spacingSize = 0;//Пробелы между сгруппироваными полями QLabel - ...
+    //Можно сделать через setSpacing, но тогда надо группировать попарно элементы в QVBoxLayout
 
     {
         //Имя без разделения на ФИО
@@ -39,7 +43,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         */
     }
 
-    dataLayout->addSpacing(10);
+    dataLayout->addSpacing(spacingSize);
 
     {
         //Пол (без вертолётов и возможности не указывать)
@@ -50,27 +54,79 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QHBoxLayout * genderLayout = new QHBoxLayout();
         dataLayout->addLayout(genderLayout);
 
-        //Можно создать для кнопок QButtonGroup, чтобы они не влияли на другие возможные кнопки
         QRadioButton * maleRadioButton = new QRadioButton("M");
         genderLayout->addWidget(maleRadioButton);
         QRadioButton * femaleRadioButton = new QRadioButton("Ж");
         genderLayout->addWidget(femaleRadioButton);
+
+        //Можно создать для кнопок QButtonGroup, чтобы они не влияли на другие возможные кнопки
+        //Или так:
+        maleRadioButton->setAutoExclusive(true);
+        femaleRadioButton->setAutoExclusive(true);
     }
 
-    dataLayout->addSpacing(10);
+    dataLayout->addSpacing(spacingSize);
 
     {
         //Возраст
+        //От 0 до 150
         //При наличии даты рождения и текущего времени - сомнительное удовольствие
         //Как его проверять и зачем он нужен?
         //Окей, допустим, что это - возраст в какой-то определённый момент. Например,
         //возраст, в котором человек последний раз участвовал в шахматном турнире
         //или его "внутренний возраст" аля самочувствие
+
+        QLabel * ageLabel = new QLabel("Возраст");
+        dataLayout->addWidget(ageLabel);
+
+        QSpinBox * ageSpinBox = new QSpinBox();
+        dataLayout->addWidget(ageSpinBox);
+        ageSpinBox->setRange(0, 150);
+        ageSpinBox->setValue(20);
     }
 
+    dataLayout->addSpacing(spacingSize);
+
+    {
+        //Рост
+        //От 40 см до 280 см (от младенца до самого высокого человека + чуть-чуть)
+
+        QLabel * hightLabel = new QLabel("Рост, см");
+        dataLayout->addWidget(hightLabel);
+
+        QSpinBox * hightSpinBox = new QSpinBox();
+        dataLayout->addWidget(hightSpinBox);
+        hightSpinBox->setRange(40, 280);
+        hightSpinBox->setValue(170);
+    }
+
+    dataLayout->addSpacing(spacingSize);
+
+    {
+        //Вес
+        //От 2 кг до 1000 кг (ого, вес Кэрол Ягер был 927 кг)
+
+        QLabel * weightLabel = new QLabel("Вес, кг");
+        dataLayout->addWidget(weightLabel);
+
+        QSpinBox * weightSpinBox = new QSpinBox();
+        dataLayout->addWidget(weightSpinBox);
+        weightSpinBox->setRange(2, 1000);
+        weightSpinBox->setValue(45);
+    }
+
+    dataLayout->addSpacing(spacingSize);
+
+    {
+        //Национальность
+    }
+
+
+    //hLayout->addStretch(1);
+
     QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий");
-    connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
     hLayout->addWidget(closePushButton);
+    connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
 
 
 

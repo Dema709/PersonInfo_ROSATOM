@@ -8,6 +8,8 @@
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QDateEdit>
+#include <QCheckBox>
 #include <QPushButton>
 
 #include <QMessageBox>
@@ -139,9 +141,49 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         ethnicComboBox->addItems(ethnicGroups);
     }
 
+    dataLayout->addSpacing(spacingSize);
 
+    {
+        //Дата рождения
+        //От 1900 года до 2100
+        //Как вариант - до текущего дня. Вот только время на компьютере может стоять неправильное
+        QLabel * birthDateLabel = new QLabel("Дата рождения (день, месяц, год)");
+        dataLayout->addWidget(birthDateLabel);
 
-    //hLayout->addStretch(1);
+        QDateEdit * birthDateEdit = new QDateEdit();//Ещё вариант - ввод в виде строки (в различных форматах)
+        dataLayout->addWidget(birthDateEdit);
+        birthDateEdit->setMinimumDate(QDate(1900,1,1));//QDate(int y, int m, int d)
+        birthDateEdit->setMaximumDate(QDate(2100,1,1));//QDate(int y, int m, int d)
+    }
+
+    dataLayout->addSpacing(spacingSize);
+
+    {
+        //Дата cмерти
+        //Настройка аналогично дате рождения
+        QHBoxLayout * deathLabelLayout = new QHBoxLayout();
+        dataLayout->addLayout(deathLabelLayout);
+
+        QLabel * deathDateLabel = new QLabel("Дата смерти (опционально)");
+        deathLabelLayout->addWidget(deathDateLabel);
+
+        QCheckBox * deathCheckBox = new QCheckBox();
+        deathLabelLayout->addWidget(deathCheckBox);
+
+        QDateEdit * deathDateEdit = new QDateEdit();
+        dataLayout->addWidget(deathDateEdit);
+        deathDateEdit->setMinimumDate(QDate(1900,1,1));//QDate(int y, int m, int d)
+        deathDateEdit->setMaximumDate(QDate(2100,1,1));//QDate(int y, int m, int d)
+
+        deathCheckBox->setChecked(false);
+        deathDateEdit->setEnabled(false);
+        connect(deathCheckBox,SIGNAL(toggled(bool)),deathDateEdit,SLOT(setEnabled(bool)));
+    }
+
+    QPushButton * saveDataPushButton = new QPushButton("Сохранить информацию\n"
+                                                       "о человеке");
+    hLayout->addWidget(saveDataPushButton);
+    //connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
 
     QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий");
     hLayout->addWidget(closePushButton);
@@ -149,13 +191,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 
 
 
-    /*
-    имя
-    пол, возраст, рост, вес,
-    национальность(выбор из внутреннего списка, например, подмножество
-    https://tinyurl.com/q73okuc ), дата рождения,  дата смерти (может отсутствовать,
-    ситуация должна быть корректно обработана).
-    */
+
 }
 
 void InsertDataWidget::closePushButtonClicked(){

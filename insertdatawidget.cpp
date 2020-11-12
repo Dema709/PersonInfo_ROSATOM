@@ -22,10 +22,10 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Информация о человеке: ввод данных");//Название окна
 
-    QVBoxLayout * hLayout = new QVBoxLayout(this);
+    QVBoxLayout * vLayout = new QVBoxLayout(this);
 
     QGroupBox * dataGroupBox = new QGroupBox("Введите информацию");
-    hLayout->addWidget(dataGroupBox);
+    vLayout->addWidget(dataGroupBox);
 
     QVBoxLayout * dataLayout = new QVBoxLayout();
     dataGroupBox->setLayout(dataLayout);
@@ -180,14 +180,29 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         connect(deathCheckBox,SIGNAL(toggled(bool)),deathDateEdit,SLOT(setEnabled(bool)));
     }
 
-    QPushButton * saveDataPushButton = new QPushButton("Сохранить информацию\n"
-                                                       "о человеке");
-    hLayout->addWidget(saveDataPushButton);
-    //connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
 
-    QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий");
-    hLayout->addWidget(closePushButton);
-    connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
+    {
+        //Кнопки управления
+        QHBoxLayout * buttonsLayout = new QHBoxLayout();
+        vLayout->addLayout(buttonsLayout);
+
+        QPushButton * saveDataPushButton = new QPushButton("Сохранить информацию\n"
+                                                           "о человеке");
+        buttonsLayout->addWidget(saveDataPushButton);
+        //connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
+
+        QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий");
+        buttonsLayout->addWidget(closePushButton);
+        connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
+
+        //Для одинакового размера кнопок
+        saveDataPushButton->setMinimumWidth(170);
+        closePushButton->setMinimumWidth(170);
+
+        saveDataPushButton ->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        closePushButton ->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    }
+
 
 
 

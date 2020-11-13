@@ -8,6 +8,14 @@
 
 #include <QDebug>
 
+/*
+//temp!!!!
+#define DEBUG
+#define _DEBUG
+#include <crtdbg.h>
+#define _CRTDBG_MAP_ALLOC
+//endtemp!!!
+*/
 
 DialogWidget::DialogWidget(QWidget *parent)
     : QWidget(parent)
@@ -29,25 +37,31 @@ DialogWidget::DialogWidget(QWidget *parent)
     connect(insertPushButton, SIGNAL(clicked()),SLOT(insertPushButtonClicked()));
     connect(displayPushButton, SIGNAL(clicked()),SLOT(displayPushButtonClicked()));
 
-    insertDataWidget = new InsertDataWidget();
+    //insertDataWidget = new InsertDataWidget();
     displayDataWidget = new DisplayDataWidget();
 
-    //insertDataWidget->resize(370,100);
-    //displayDataWidget->resize(370,100);
-
     //Подключение отображения окна выбора действий при закрытии ввода/вывода по кнопке
-    connect(insertDataWidget, &InsertDataWidget::firstWindow, this, &DialogWidget::show);
+    //connect(insertDataWidget, &InsertDataWidget::firstWindow, this, &DialogWidget::show);
     connect(displayDataWidget, &DisplayDataWidget::firstWindow, this, &DialogWidget::show);
 }
 
 DialogWidget::~DialogWidget()
 {
-    delete insertDataWidget;
+    if (isInsertDataWidgetOpened){
+        delete insertDataWidget;
+    }
     delete displayDataWidget;
 }
 
 void DialogWidget::insertPushButtonClicked(){
     this->hide();    // Скрываем основное окно
+    //qDebug()<<_CrtDumpMemoryLeaks();
+
+
+    insertDataWidget = new InsertDataWidget();
+    isInsertDataWidgetOpened = true;
+    connect(insertDataWidget, SIGNAL(firstWindow()), this, SLOT(backFromInsertDataWidget()));
+
     insertDataWidget->show();
 }
 
@@ -55,3 +69,14 @@ void DialogWidget::displayPushButtonClicked(){
     this->hide();    // Скрываем основное окно
     displayDataWidget->show();
 }
+
+void DialogWidget::backFromInsertDataWidget(){
+    //connect(insertDataWidget, SIGNAL(firstWindow()), this, SLOT(backFromInsertDataWidget()));
+    insertDataWidget->deleteLater();
+    isInsertDataWidgetOpened = false;
+    this->show();
+}
+/*
+void DialogWidget::backFromDisplayDataWidget(){
+
+}*/

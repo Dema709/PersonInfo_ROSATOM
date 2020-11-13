@@ -291,6 +291,7 @@ void InsertDataWidget::closePushButtonClicked(){
 void InsertDataWidget::saveDataPushButtonClicked(){
     Person person;
 
+    /*
     if (!true){//Тестовый вывод
         qDebug()<<"Name:"<<nameLineEdit->text();
         qDebug()<<"Male:"<<maleRadioButton->isChecked();
@@ -302,7 +303,7 @@ void InsertDataWidget::saveDataPushButtonClicked(){
         qDebug()<<"DeathDat:"<<deathDateEdit->date();
         qDebug()<<"IsAlive:"<<!deathCheckBox->isChecked();
 
-    }
+    }*/
 
     /*QStringList validate(QString name, bool male, int age, int hight, int weight, QString ethnicGroup,
                          QDate birthDate, QDate deathDate, bool isAlive);*/
@@ -320,9 +321,14 @@ void InsertDataWidget::saveDataPushButtonClicked(){
     if (errors.empty()){
         qDebug()<<"Person OK";
     } else {
+
+        QMessageBox::information(this, tr("Предупреждение"),
+                             tr("Введённая информация невалидна"));
+
         qDebug()<<"Person NOT ok:";
         for (auto & t : errors){
             qDebug()<<t;
         }
     }
+    //QDialog();
 }

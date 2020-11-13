@@ -1,7 +1,5 @@
 #include "dialogwidget.h"
 
-//#include "insertdatawidget.h"
-
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QSizePolicy>
@@ -28,12 +26,6 @@ DialogWidget::DialogWidget(QWidget *parent)
     //Подключение кнопок на открытие других виджетов
     connect(insertPushButton, SIGNAL(clicked()),SLOT(insertPushButtonClicked()));
     connect(displayPushButton, SIGNAL(clicked()),SLOT(displayPushButtonClicked()));
-
-
-
-
-
-
 }
 
 DialogWidget::~DialogWidget()

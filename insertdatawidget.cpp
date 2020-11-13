@@ -1,15 +1,14 @@
 #include "insertdatawidget.h"
 
 #include <QVBoxLayout>
-//#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
-#include <QRadioButton>
-#include <QSpinBox>
-#include <QComboBox>
-#include <QDateEdit>
-#include <QCheckBox>
+//#include <QLineEdit>
+//#include <QRadioButton>
+//#include <QSpinBox>
+//#include <QComboBox>
+//#include <QDateEdit>
+//#include <QCheckBox>
 #include <QPushButton>
 
 #include <QMessageBox>
@@ -40,7 +39,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QLabel * nameLabel = new QLabel("Имя");
         dataLayout->addWidget(nameLabel);
 
-        QLineEdit * nameLineEdit = new QLineEdit();
+        nameLineEdit = new QLineEdit();
         dataLayout->addWidget(nameLineEdit);
         nameLineEdit->setMaxLength(200);
         /*
@@ -61,15 +60,17 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QHBoxLayout * genderLayout = new QHBoxLayout();
         dataLayout->addLayout(genderLayout);
 
-        QRadioButton * maleRadioButton = new QRadioButton("M");
+        maleRadioButton = new QRadioButton("M");
         genderLayout->addWidget(maleRadioButton);
-        QRadioButton * femaleRadioButton = new QRadioButton("Ж");
+        femaleRadioButton = new QRadioButton("Ж");
         genderLayout->addWidget(femaleRadioButton);
 
         //Можно создать для кнопок QButtonGroup, чтобы они не влияли на другие возможные кнопки
         //Или так:
         maleRadioButton->setAutoExclusive(true);
         femaleRadioButton->setAutoExclusive(true);
+
+        maleRadioButton->setChecked(true);
     }
 
     dataLayout->addSpacing(spacingSize);
@@ -86,7 +87,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QLabel * ageLabel = new QLabel("Возраст");
         dataLayout->addWidget(ageLabel);
 
-        QSpinBox * ageSpinBox = new QSpinBox();
+        ageSpinBox = new QSpinBox();
         dataLayout->addWidget(ageSpinBox);
         ageSpinBox->setRange(0, 150);
         ageSpinBox->setValue(20);
@@ -101,7 +102,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QLabel * hightLabel = new QLabel("Рост, см");
         dataLayout->addWidget(hightLabel);
 
-        QSpinBox * hightSpinBox = new QSpinBox();
+        hightSpinBox = new QSpinBox();
         dataLayout->addWidget(hightSpinBox);
         hightSpinBox->setRange(40, 280);
         hightSpinBox->setValue(170);
@@ -116,7 +117,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QLabel * weightLabel = new QLabel("Вес, кг");
         dataLayout->addWidget(weightLabel);
 
-        QSpinBox * weightSpinBox = new QSpinBox();
+        weightSpinBox = new QSpinBox();
         dataLayout->addWidget(weightSpinBox);
         weightSpinBox->setRange(2, 1000);
         weightSpinBox->setValue(45);
@@ -129,7 +130,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QLabel * ethnicLabel = new QLabel("Национальность");
         dataLayout->addWidget(ethnicLabel);
 
-        QComboBox * ethnicComboBox = new QComboBox();
+        ethnicComboBox = new QComboBox();
         dataLayout->addWidget(ethnicComboBox);
 
         QStringList ethnicGroups = readEthnicGroups();
@@ -151,10 +152,12 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QLabel * birthDateLabel = new QLabel("Дата рождения (день, месяц, год)");
         dataLayout->addWidget(birthDateLabel);
 
-        QDateEdit * birthDateEdit = new QDateEdit();//Ещё вариант - ввод в виде строки (в различных форматах)
+        birthDateEdit = new QDateEdit();//Ещё вариант - ввод в виде строки (в различных форматах)
         dataLayout->addWidget(birthDateEdit);
         birthDateEdit->setMinimumDate(QDate(1900,1,1));//QDate(int y, int m, int d)
         birthDateEdit->setMaximumDate(QDate(2100,1,1));//QDate(int y, int m, int d)
+
+        birthDateEdit->setDate(QDate(2000,1,1));//QDate(int y, int m, int d)
     }
 
     dataLayout->addSpacing(spacingSize);
@@ -168,13 +171,15 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QLabel * deathDateLabel = new QLabel("Дата смерти (опционально)");
         deathLabelLayout->addWidget(deathDateLabel);
 
-        QCheckBox * deathCheckBox = new QCheckBox();
+        deathCheckBox = new QCheckBox();
         deathLabelLayout->addWidget(deathCheckBox);
 
-        QDateEdit * deathDateEdit = new QDateEdit();
+        deathDateEdit = new QDateEdit();
         dataLayout->addWidget(deathDateEdit);
         deathDateEdit->setMinimumDate(QDate(1900,1,1));//QDate(int y, int m, int d)
         deathDateEdit->setMaximumDate(QDate(2100,1,1));//QDate(int y, int m, int d)
+
+        deathDateEdit->setDate(QDate(2000,1,1));//QDate(int y, int m, int d)
 
         deathCheckBox->setChecked(false);
         deathDateEdit->setEnabled(false);
@@ -190,7 +195,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QPushButton * saveDataPushButton = new QPushButton("Сохранить информацию\n"
                                                            "о человеке");
         buttonsLayout->addWidget(saveDataPushButton);
-        //connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
+        connect(saveDataPushButton, SIGNAL(clicked()),SLOT(saveDataPushButtonClicked()));
 
         QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий");
         buttonsLayout->addWidget(closePushButton);
@@ -208,11 +213,6 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 
 
 
-}
-
-void InsertDataWidget::closePushButtonClicked(){
-    this->close();
-    emit firstWindow();
 }
 
 QStringList InsertDataWidget::readEthnicGroups(){
@@ -251,4 +251,34 @@ QStringList InsertDataWidget::readEthnicGroups(){
     }
 
     return answer;
+}
+
+void InsertDataWidget::resetFieldsToDefault(){
+    qDebug()<<"resetFieldsToDefault";
+    nameLineEdit->clear();
+
+    maleRadioButton->setChecked(true);
+
+    ageSpinBox->setValue(20);
+
+    hightSpinBox->setValue(170);
+
+    weightSpinBox->setValue(45);
+
+    ethnicComboBox->setCurrentIndex(0);
+
+    birthDateEdit->setDate(QDate(2000,1,1));//QDate(int y, int m, int d)
+
+    deathDateEdit->setDate(QDate(2000,1,1));//QDate(int y, int m, int d)
+    deathCheckBox->setChecked(false);
+    deathDateEdit->setEnabled(false);
+}
+
+void InsertDataWidget::closePushButtonClicked(){
+    this->close();
+    emit firstWindow();
+}
+
+void InsertDataWidget::saveDataPushButtonClicked(){
+    resetFieldsToDefault();//temp test
 }

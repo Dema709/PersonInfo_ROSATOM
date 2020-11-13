@@ -16,13 +16,8 @@ public:
 private:
     InsertDataWidget *insertDataWidget;
     DisplayDataWidget * displayDataWidget;
-    bool isInsertDataWidgetOpened = false;
-    bool isDisplayDataWidgetOpened = false;
 private slots:
     void insertPushButtonClicked();
     void displayPushButtonClicked();
-    void backFromInsertDataWidget();
-    //void backFromDisplayDataWidget();
-
 };
 #endif // WIDGET_H

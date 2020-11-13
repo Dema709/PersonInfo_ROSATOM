@@ -18,13 +18,10 @@
 #include <algorithm> //readEthnicGroups
 #include <stdexcept>//исключения
 
-#include <vector>//temp!!!!!!
-
 InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Информация о человеке: ввод данных");//Название окна
 
- if (false){//temp
     QVBoxLayout * vLayout = new QVBoxLayout(this);
 
     QGroupBox * dataGroupBox = new QGroupBox("Введите информацию");
@@ -64,9 +61,9 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QHBoxLayout * genderLayout = new QHBoxLayout();
         dataLayout->addLayout(genderLayout);
 
-        QRadioButton * maleRadioButton = new QRadioButton("Мужской");
+        QRadioButton * maleRadioButton = new QRadioButton("M");
         genderLayout->addWidget(maleRadioButton);
-        QRadioButton * femaleRadioButton = new QRadioButton("Женский");
+        QRadioButton * femaleRadioButton = new QRadioButton("Ж");
         genderLayout->addWidget(femaleRadioButton);
 
         //Можно создать для кнопок QButtonGroup, чтобы они не влияли на другие возможные кнопки
@@ -205,19 +202,14 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         saveDataPushButton ->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         closePushButton ->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     }
- } else {
-     QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий",this);
-     connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
 
 
-     for (int i=0; i<1024*1024; i++){
-         A_temp.push_back(0);
-     }
- }
+
+
+
 }
 
 void InsertDataWidget::closePushButtonClicked(){
-    //this->setAttribute(Qt::WA_DeleteOnClose, true);
     this->close();
     emit firstWindow();
 }
@@ -255,7 +247,3 @@ QStringList InsertDataWidget::readEthnicGroups(){
 
     return answer;
 }
-/*
-InsertDataWidget::~InsertDataWidget(){
-    qDebug()<<"~InsertDataWidget";
-}*/

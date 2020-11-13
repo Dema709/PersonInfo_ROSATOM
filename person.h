@@ -15,6 +15,7 @@ public:
                          QDate birthDate, QDate deathDate, bool isAlive);
     QString checkName(QString& name);
     QString checkBody(int hight, int weight);
+    QString checkDates(QDate birthDate, QDate deathDate, bool isAlive, int age);
 
     void TestCheckName();//Проверка валидности имени
 

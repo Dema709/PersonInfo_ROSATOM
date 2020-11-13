@@ -20,11 +20,31 @@ QStringList Person::validate(QString name, bool male, int age, int hight, int we
     }
 
     checkResult = checkBody(hight, weight);
+    if (!checkResult.isEmpty()){
+        errors+=checkResult;
+    }
 
+    checkResult = checkDates(birthDate, deathDate, isAlive, age);
+    if (!checkResult.isEmpty()){
+        errors+=checkResult;
+    }
 
+    //Здесь может быть проверка на ethnicGroup. Её нет, так как пока что данные вводятся только
+    //из одного места, где все возможные варианты правильны.
+    //Поэтому же и некоторые реализованные проверки излишни
 
-    /*errors += "testError1";
-    errors += "testError2";*/
+    if (errors.empty()){
+        //Заполнение структуры
+        name_ = name;
+        male_ = male;
+        age_ = age;
+        hight_ = hight;
+        weight_ = weight;
+        ethnicGroup_ = ethnicGroup;
+        birthDate_ = birthDate;
+        deathDate_ = deathDate;
+        isAlive_ = isAlive;
+    }
 
     return errors;
 }
@@ -98,6 +118,45 @@ QString Person::checkBody(int hight, int weight){
 
     if (weight<2 || weight>1000){//От 2 кг до 1000 кг
         return "Неправильный вес";
+    }
+
+    return {};
+}
+
+QString Person::checkDates(QDate birthDate, QDate deathDate, bool isAlive, int age){
+    bool isComputerTimeOk = true;//Так как на некоторых компьютерах не заменяют разряженные батарейки,
+        //на них сбрасывается время. В таком случае нет смысла сверять данные с текущей датой
+
+    if (isComputerTimeOk){
+        if (birthDate > QDate::currentDate()){
+            QString errorString = "Дата рождения некорректна";
+            errorString += " (Текущая дата " + QDate::currentDate().toString("dd.MM.yyyy") + ")";
+            return errorString;
+        }
+
+        if (!isAlive && deathDate > QDate::currentDate()){
+            QString errorString = "Дата смерти некорректна";
+            errorString += " (Текущая дата " + QDate::currentDate().toString("dd.MM.yyyy") + ")";
+            return errorString;
+        }
+
+        if (birthDate.addYears(age) > QDate::currentDate()){
+            QString errorString = "Возраст некорректен";
+            errorString += " (Текущая дата " + QDate::currentDate().toString("dd.MM.yyyy") + ")";
+            return errorString;
+        }
+    }
+
+    if (!isAlive && birthDate>deathDate){
+        return "Даты рождения и смерти не соотносятся";
+    }
+
+    if (age<0 || age>150){
+        return "Возраст не входит в заданные границы (0 - 150)";
+    }
+
+    if (!isAlive && birthDate.addYears(age) > deathDate){
+        return "Некорректный возраст (см. дату смерти)";
     }
 
     return {};

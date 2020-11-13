@@ -1,5 +1,6 @@
 #include "insertdatawidget.h"
 #include "person.h"
+//#include "database.h"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -22,11 +23,11 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Информация о человеке: ввод данных");//Название окна
 
-    {//temp
+    /*{//temp
         qDebug()<<"Testing Person";
         Person p;
         p.TestCheckName();
-    }
+    }*/
 
     QVBoxLayout * vLayout = new QVBoxLayout(this);
 
@@ -318,17 +319,39 @@ void InsertDataWidget::saveDataPushButtonClicked(){
                 deathDateEdit->date(),
                 !deathCheckBox->isChecked()
                 );
+
     if (errors.empty()){
-        qDebug()<<"Person OK";
+
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("Подтверждение сохранения");
+        msgBox.setText("Проверьте правильность информации:");
+        msgBox.setInformativeText(person.toQString());
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.addButton(tr("Сохранить"), QMessageBox::AcceptRole);
+        msgBox.addButton(tr("Отмена"), QMessageBox::RejectRole);
+
+        //int result = msgBox.exec();
+        if (msgBox.exec() == QMessageBox::AcceptRole){
+            bool writeDbResult = person.writeInDb();
+            if (writeDbResult){
+                resetFieldsToDefault();
+            } else {
+                //temp
+                //Вывести ошибку? Или она будет выведена при попытке записать в базу?!!!!!!!!!!!!!!
+            }
+        }//Иначе просто возвращаемся в окно ввода
+
     } else {
 
-        QMessageBox::information(this, tr("Предупреждение"),
-                             tr("Введённая информация невалидна"));
+        QString errorMessage("Невозможно сохранить информацию\n\n");
+        auto it = errors.begin();
+        while (it != std::prev(errors.end())){
+            errorMessage += *it;
+            errorMessage += '\n';//Добавляем строки ошибок с переводом строки
+            it = std::next(it);
+        }   errorMessage += *it;//Добавляем последнюю строку
 
-        qDebug()<<"Person NOT ok:";
-        for (auto & t : errors){
-            qDebug()<<t;
-        }
+        QMessageBox::warning(this, tr("Внимание"),
+                             errorMessage);
     }
-    //QDialog();
 }

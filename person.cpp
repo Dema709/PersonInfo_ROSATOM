@@ -44,9 +44,34 @@ QStringList Person::validate(QString name, bool male, int age, int hight, int we
         birthDate_ = birthDate;
         deathDate_ = deathDate;
         isAlive_ = isAlive;
+
+        isInitialized = true;
     }
 
     return errors;
+}
+
+QString Person::toQString(){
+    if (!isInitialized) return {};
+
+    QString output;
+    output += "Имя: " + name_ + '\n';
+    output += "Пол: " + (male_ ? QString("Мужской") : QString("Женский")) + '\n';
+    output += "Возраст: " + QString::number(age_) + '\n';
+    output += "Рост: " + QString::number(hight_) + " см\n";
+    output += "Вес: " + QString::number(weight_) + " кг\n";
+    output += "Национальность: " + ethnicGroup_ + '\n';
+    output += "Дата рождения: " + birthDate_.toString("dd.MM.yyyy");
+    if (!isAlive_){
+        output += "\nДата cмерти: " + deathDate_.toString("dd.MM.yyyy");
+    }
+
+    return output;
+}
+
+bool Person::writeInDb(){
+    //temp
+    return true;
 }
 
 QString Person::checkName(QString& name){

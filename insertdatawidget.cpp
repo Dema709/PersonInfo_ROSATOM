@@ -135,7 +135,8 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QStringList ethnicGroups = readEthnicGroups();
         if (ethnicGroups.empty()){
             QMessageBox::warning(this, tr("InsertDataWidget"),
-                                 tr("readEthnicGroups() returned empty QStringList"));
+                                 tr("readEthnicGroups() returned empty QStringList\n"
+                                    "Aborting..."));
             Q_ASSERT(false);
         }
         ethnicComboBox->addItems(ethnicGroups);
@@ -219,8 +220,10 @@ QStringList InsertDataWidget::readEthnicGroups(){
     ifstream fin("Ethnic_groups_in_Russia.txt");
     if (!fin.is_open()){
         QMessageBox::warning(this, tr("InsertDataWidget"),
-                             tr("readEthnicGroups() cannot open file"));
+                             tr("readEthnicGroups() cannot open file\n"
+                                "Aborting..."));
         Q_ASSERT(false);
+        //Другие варианты:
         /*
         std::string errorString= "InsertDataWidget::readEthnicGroups() cannot open file";
         throw std::runtime_error(errorString);
@@ -241,6 +244,8 @@ QStringList InsertDataWidget::readEthnicGroups(){
         answer += QString::fromStdString(tempString);
     }
 
+    //Сортировка по алфавиту всех элементов кроме первого (самый часто встречающийся - "Русские")
+    //и последнего ("Прочие")
     if (answer.size()>2){
         sort(next(answer.begin()), prev(answer.end()));
     }

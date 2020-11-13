@@ -16,8 +16,12 @@ public:
 private:
     InsertDataWidget *insertDataWidget;
     DisplayDataWidget * displayDataWidget;
+    bool isInsertDataWidgetOpened = false;
+    bool isDisplayDataWidgetOpened = false;
 private slots:
     void insertPushButtonClicked();
     void displayPushButtonClicked();
+    void backFromInsertDataWidget();//Как слот - публичный, как функция - приватная. Если бы не эта фича,
+    void backFromDisplayDataWidget();//надо было бы объявить перед их как public slots
 };
 #endif // WIDGET_H

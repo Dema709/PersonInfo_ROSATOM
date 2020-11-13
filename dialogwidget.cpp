@@ -29,29 +29,50 @@ DialogWidget::DialogWidget(QWidget *parent)
     connect(insertPushButton, SIGNAL(clicked()),SLOT(insertPushButtonClicked()));
     connect(displayPushButton, SIGNAL(clicked()),SLOT(displayPushButtonClicked()));
 
-    insertDataWidget = new InsertDataWidget();
-    displayDataWidget = new DisplayDataWidget();
 
-    //insertDataWidget->resize(370,100);
-    //displayDataWidget->resize(370,100);
 
-    //Подключение отображения окна выбора действий при закрытии ввода/вывода по кнопке
-    connect(insertDataWidget, &InsertDataWidget::firstWindow, this, &DialogWidget::show);
-    connect(displayDataWidget, &DisplayDataWidget::firstWindow, this, &DialogWidget::show);
+
+
+
 }
 
 DialogWidget::~DialogWidget()
 {
-    delete insertDataWidget;
-    delete displayDataWidget;
+    if (isInsertDataWidgetOpened){
+        delete insertDataWidget;
+    }
+    if (isDisplayDataWidgetOpened){
+        delete displayDataWidget;
+    }
 }
 
 void DialogWidget::insertPushButtonClicked(){
     this->hide();    // Скрываем основное окно
+
+    insertDataWidget = new InsertDataWidget();
+    //Подключение отображения окна выбора действий при закрытии ввода/вывода по кнопке
+    connect(insertDataWidget, SIGNAL(firstWindow()), this, SLOT(backFromInsertDataWidget()));
+
     insertDataWidget->show();
 }
 
 void DialogWidget::displayPushButtonClicked(){
     this->hide();    // Скрываем основное окно
+
+    displayDataWidget = new DisplayDataWidget();
+    connect(displayDataWidget, SIGNAL(firstWindow()), this, SLOT(backFromDisplayDataWidget()));
+
     displayDataWidget->show();
+}
+
+void DialogWidget::backFromInsertDataWidget(){
+    insertDataWidget->deleteLater();
+    isInsertDataWidgetOpened = false;
+    this->show();
+}
+
+void DialogWidget::backFromDisplayDataWidget(){
+    displayDataWidget->deleteLater();
+    isDisplayDataWidgetOpened = false;
+    this->show();
 }

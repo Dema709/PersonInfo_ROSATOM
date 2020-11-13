@@ -55,6 +55,8 @@ DialogWidget::~DialogWidget()
 
 void DialogWidget::insertPushButtonClicked(){
     this->hide();    // Скрываем основное окно
+    //qDebug()<<_CrtDumpMemoryLeaks();
+
 
     insertDataWidget = new InsertDataWidget();
     isInsertDataWidgetOpened = true;

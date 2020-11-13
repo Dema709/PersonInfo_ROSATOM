@@ -12,12 +12,15 @@ SOURCES += \
     dialogwidget.cpp \
     displaydatawidget.cpp \
     insertdatawidget.cpp \
-    main.cpp
+    main.cpp \
+    person.cpp
 
 HEADERS += \
     dialogwidget.h \
     displaydatawidget.h \
-    insertdatawidget.h
+    insertdatawidget.h \
+    person.h \
+    test_runner.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

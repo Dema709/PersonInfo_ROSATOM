@@ -1,4 +1,5 @@
 #include "insertdatawidget.h"
+#include "person.h"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -20,6 +21,12 @@
 InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Информация о человеке: ввод данных");//Название окна
+
+    {//temp
+        qDebug()<<"Testing Person";
+        Person p;
+        p.TestCheckName();
+    }
 
     QVBoxLayout * vLayout = new QVBoxLayout(this);
 
@@ -254,7 +261,6 @@ QStringList InsertDataWidget::readEthnicGroups(){
 }
 
 void InsertDataWidget::resetFieldsToDefault(){
-    qDebug()<<"resetFieldsToDefault";
     nameLineEdit->clear();
 
     maleRadioButton->setChecked(true);
@@ -280,5 +286,40 @@ void InsertDataWidget::closePushButtonClicked(){
 }
 
 void InsertDataWidget::saveDataPushButtonClicked(){
-    resetFieldsToDefault();//temp test
+    Person person;
+
+    if (!true){//Тестовый вывод
+        qDebug()<<"Name:"<<nameLineEdit->text();
+        qDebug()<<"Male:"<<maleRadioButton->isChecked();
+        qDebug()<<"Age:"<<ageSpinBox->value();
+        qDebug()<<"Hight:"<<hightSpinBox->value();
+        qDebug()<<"Weight:"<<weightSpinBox->value();
+        qDebug()<<"EthnicGroup:"<<ethnicComboBox->currentText();
+        qDebug()<<"BirthDate:"<<birthDateEdit->date();
+        qDebug()<<"DeathDat:"<<deathDateEdit->date();
+        qDebug()<<"IsAlive:"<<!deathCheckBox->isChecked();
+
+    }
+
+    /*QStringList validate(QString name, bool male, int age, int hight, int weight, QString ethnicGroup,
+                         QDate birthDate, QDate deathDate, bool isAlive);*/
+    QStringList errors = person.validate(
+                nameLineEdit->text(),
+                maleRadioButton->isChecked(),
+                ageSpinBox->value(),
+                hightSpinBox->value(),
+                weightSpinBox->value(),
+                ethnicComboBox->currentText(),
+                birthDateEdit->date(),
+                deathDateEdit->date(),
+                !deathCheckBox->isChecked()
+                );
+    if (errors.empty()){
+        qDebug()<<"Person OK";
+    } else {
+        qDebug()<<"Person NOT ok:";
+        for (auto & t : errors){
+            qDebug()<<t;
+        }
+    }
 }

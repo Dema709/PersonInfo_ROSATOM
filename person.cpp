@@ -71,6 +71,10 @@ QString Person::toQString(){
 }
 
 QString Person::writeInDb(){
+    //Не уверен, нужно ли вызывать db.close() вручную, потому что:
+    //QSqlDatabase::~QSqlDatabase()
+    //Note: When the last connection is destroyed, the destructor implicitly calls close() to release the database connection.
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("person.db");
 
@@ -98,7 +102,7 @@ QString Person::writeInDb(){
     QStringList tables = db.tables();
     if (!tables.contains("persons", Qt::CaseInsensitive)){
         if (!q.exec(PERSONS_SQL)){
-            db.close();
+            //db.close();
             return q.lastError().text();
         }
     }
@@ -109,7 +113,7 @@ QString Person::writeInDb(){
         )");
 
     if (!q.prepare(INSERT_REPSON_SQL)){
-        db.close();
+        //db.close();
         return q.lastError().text();
     }
 
@@ -124,11 +128,11 @@ QString Person::writeInDb(){
     q.bindValue(":isAlive", isAlive_);
 
     if (!q.exec()){
-        db.close();
+        //db.close();
         return q.lastError().text();
     }
 
-    db.close();
+    //db.close();
 
     return {};
 }
@@ -168,7 +172,7 @@ QString Person::checkName(QString& name){
         } else {
             if (isOkNotAlphabet(name[i])){
                 if (lastCharWasNotAlphabet){//Два небуквенных символа подряд
-                    return "Некорректная последовательность: " + name[i-1] + name[i];
+                    return "Некорректная последовательность: '" + name[i-1] + name[i] + "'";
                 } else {
                     lastCharWasNotAlphabet = true;
                 }

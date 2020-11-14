@@ -322,12 +322,13 @@ void InsertDataWidget::saveDataPushButtonClicked(){
 
         //int result = msgBox.exec();
         if (msgBox.exec() == QMessageBox::AcceptRole){
-            bool writeDbResult = person.writeInDb();
-            if (writeDbResult){
+            QString writeDbResult = person.writeInDb();
+            if (writeDbResult.isEmpty()){
                 resetFieldsToDefault();
             } else {
-                //temp
-                //Вывести ошибку? Или она будет выведена при попытке записать в базу?!!!!!!!!!!!!!!
+                //writeDbResult
+                QMessageBox::warning(this, tr("Ошибка"),
+                                     "Запись в базу данных не удалась\n\n" + writeDbResult);
             }
         }//Иначе просто возвращаемся в окно ввода
 

@@ -3,6 +3,8 @@
 
 #include <QString>
 
-QString initDbForWrite();//Возвращает строку с ошибкой
+//Функции возвращают строку с ошибкой
+QString createConnection();
+QString initDbForWrite();
 
 #endif // DATABASE_H

@@ -2,9 +2,9 @@
 #include "database.h"
 #include "test_runner.h"//temp for tests
 
-#include <QRegExpValidator>
-
+#include <QtSql>
 #include <QDebug>
+//#include <QRegExpValidator>
 
 Person::Person()
 {
@@ -70,11 +70,67 @@ QString Person::toQString(){
     return output;
 }
 
-bool Person::writeInDb(){
-    initDbForWrite();
+QString Person::writeInDb(){
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("person.db");
 
-    //temp
-    return true;
+    if (!db.open()){
+        qDebug()<<db.lastError().text();
+        return db.lastError().text();
+    }
+
+    const auto PERSONS_SQL = QLatin1String(R"(
+        create table persons(id integer primary key,
+                                         name        varchar,
+                                         male        boolean,
+                                         age         integer,
+                                         hight       integer,
+                                         weight      integer,
+                                         ethnicGroup varchar,
+                                         birthDate   date,
+                                         deathDate   date,
+                                         isAlive     boolean)
+        )");
+
+    QSqlQuery q;
+
+    //Если такой таблицы нет, создаём её
+    QStringList tables = db.tables();
+    if (!tables.contains("persons", Qt::CaseInsensitive)){
+        if (!q.exec(PERSONS_SQL)){
+            db.close();
+            return q.lastError().text();
+        }
+    }
+
+    const auto INSERT_REPSON_SQL = QLatin1String(R"(
+        insert into persons(name, male, age, hight, weight, ethnicGroup, birthDate, deathDate, isAlive)
+                          values(:name, :male, :age, :hight, :weight, :ethnicGroup, :birthDate, :deathDate, :isAlive)
+        )");
+
+    if (!q.prepare(INSERT_REPSON_SQL)){
+        db.close();
+        return q.lastError().text();
+    }
+
+    q.bindValue(":name", name_);
+    q.bindValue(":male", male_);
+    q.bindValue(":age", age_);
+    q.bindValue(":hight", hight_);
+    q.bindValue(":weight", weight_);
+    q.bindValue(":ethnicGroup", ethnicGroup_);
+    q.bindValue(":birthDate", birthDate_);
+    q.bindValue(":deathDate", deathDate_);
+    q.bindValue(":isAlive", isAlive_);
+
+    if (!q.exec()){
+        db.close();
+        return q.lastError().text();
+    }
+
+    db.close();
+
+    return {};
 }
 
 QString Person::checkName(QString& name){

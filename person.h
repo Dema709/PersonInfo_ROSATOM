@@ -14,7 +14,7 @@ public:
     QStringList validate(QString name, bool male, int age, int hight, int weight, QString ethnicGroup,
                          QDate birthDate, QDate deathDate, bool isAlive);
     QString toQString();
-    bool writeInDb();
+    QString writeInDb();
 
     void TestCheckName();//Проверка валидности имени
 private:

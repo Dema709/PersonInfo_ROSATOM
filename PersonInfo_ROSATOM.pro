@@ -14,7 +14,8 @@ SOURCES += \
     displaydatawidget.cpp \
     insertdatawidget.cpp \
     main.cpp \
-    person.cpp
+    person.cpp \
+    temptestwidget.cpp
 
 HEADERS += \
     database.h \
@@ -22,6 +23,7 @@ HEADERS += \
     displaydatawidget.h \
     insertdatawidget.h \
     person.h \
+    temptestwidget.h \
     test_runner.h
 
 # Default rules for deployment.

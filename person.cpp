@@ -1,5 +1,6 @@
 #include "person.h"
-#include "test_runner.h"
+#include "database.h"
+#include "test_runner.h"//temp for tests
 
 #include <QRegExpValidator>
 
@@ -70,6 +71,8 @@ QString Person::toQString(){
 }
 
 bool Person::writeInDb(){
+    initDbForWrite();
+
     //temp
     return true;
 }

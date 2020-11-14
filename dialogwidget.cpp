@@ -31,10 +31,10 @@ DialogWidget::DialogWidget(QWidget *parent)
 DialogWidget::~DialogWidget()
 {
     if (isInsertDataWidgetOpened){
-        delete insertDataWidget;
+        insertDataWidget->close();
     }
     if (isDisplayDataWidgetOpened){
-        delete displayDataWidget;
+        displayDataWidget->close();
     }
 }
 
@@ -44,7 +44,7 @@ void DialogWidget::insertPushButtonClicked(){
     insertDataWidget = new InsertDataWidget();
     //Подключение отображения окна выбора действий при закрытии ввода/вывода по кнопке
     connect(insertDataWidget, SIGNAL(firstWindow()), this, SLOT(backFromInsertDataWidget()));
-
+    isInsertDataWidgetOpened = true;
     insertDataWidget->show();
 }
 
@@ -53,7 +53,7 @@ void DialogWidget::displayPushButtonClicked(){
 
     displayDataWidget = new DisplayDataWidget();
     connect(displayDataWidget, SIGNAL(firstWindow()), this, SLOT(backFromDisplayDataWidget()));
-
+    isDisplayDataWidgetOpened = true;
     displayDataWidget->show();
 }
 

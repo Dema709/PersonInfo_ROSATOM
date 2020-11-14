@@ -21,13 +21,8 @@
 
 InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setWindowTitle("Информация о человеке: ввод данных");//Название окна
-
-    /*{//temp
-        qDebug()<<"Testing Person";
-        Person p;
-        p.TestCheckName();
-    }*/
 
     QVBoxLayout * vLayout = new QVBoxLayout(this);
 
@@ -210,7 +205,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 
         QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий");
         buttonsLayout->addWidget(closePushButton);
-        connect(closePushButton, SIGNAL(clicked()),SLOT(closePushButtonClicked()));
+        connect(closePushButton, &QPushButton::clicked, this, &InsertDataWidget::close);
 
         //Для одинакового размера кнопок
         saveDataPushButton->setMinimumWidth(170);
@@ -219,11 +214,11 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         saveDataPushButton ->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         closePushButton ->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     }
+}
 
-
-
-
-
+void InsertDataWidget::closeEvent(QCloseEvent*){
+    qDebug()<<"InsertDataWidget::closeEvent";
+    emit firstWindow();
 }
 
 QStringList InsertDataWidget::readEthnicGroups(){
@@ -282,11 +277,6 @@ void InsertDataWidget::resetFieldsToDefault(){
     deathDateEdit->setDate(QDate(2000,1,1));//QDate(int y, int m, int d)
     deathCheckBox->setChecked(false);
     deathDateEdit->setEnabled(false);
-}
-
-void InsertDataWidget::closePushButtonClicked(){
-    this->close();
-    emit firstWindow();
 }
 
 void InsertDataWidget::saveDataPushButtonClicked(){

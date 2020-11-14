@@ -16,6 +16,7 @@ class InsertDataWidget : public QWidget
 public:
     explicit InsertDataWidget(QWidget *parent = nullptr);
 private:
+    void closeEvent(QCloseEvent*);
     QStringList readEthnicGroups();
     void resetFieldsToDefault();
 
@@ -34,7 +35,6 @@ signals:
     void firstWindow();  // Сигнал для первого окна на открытие
 
 private slots:
-    void closePushButtonClicked();
     void saveDataPushButtonClicked();
 };
 

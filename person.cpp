@@ -1,10 +1,7 @@
 #include "person.h"
-#include "database.h"
-#include "test_runner.h"//temp for tests
 
 #include <QtSql>
 #include <QDebug>
-//#include <QRegExpValidator>
 
 Person::Person()
 {
@@ -248,103 +245,6 @@ QString Person::checkDates(QDate birthDate, QDate deathDate, bool isAlive, int a
     }
 
     return {};
-}
-
-void Person::TestCheckName(){
-    //ASSERT - функция из "test_runner.h"
-
-    {
-        QString name = "";
-        QString error = checkName(name);
-        ASSERT(!error.isEmpty());
-    }
-
-    {//244 символа
-        QString name = "ЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦ"
-                       "ЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦ"
-                       "ЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦ"
-                       "ЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦЦ";
-        QString error = checkName(name);
-        ASSERT(!error.isEmpty());
-    }
-
-    {
-        QString name = "Вася";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "Yasya";
-        QString error = checkName(name);
-        ASSERT(!error.isEmpty());
-    }
-
-    {
-        QString name = "вАсЯ";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "Василий Петров-Чет";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "М'Айк Лжец";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "Я";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "Иоганн фон Нейман";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "Дональд Трамп Мл.";
-        QString error = checkName(name);
-        ASSERT(!error.isEmpty());
-    }
-
-    {
-        QString name = "аАуа";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "А б В г-д";
-        QString error = checkName(name);
-        ASSERT(error.isEmpty());
-    }
-
-    {
-        QString name = "Вася  Пробелы";
-        QString error = checkName(name);
-        ASSERT(!error.isEmpty());
-    }
-
-    {
-        QString name = "Вася'-Василий";
-        QString error = checkName(name);
-        ASSERT(!error.isEmpty());
-    }
-
-    {
-        QString name = "Вася`Василий";
-        QString error = checkName(name);
-        ASSERT(!error.isEmpty());
-    }
 }
 
 bool Person::isOkAlphabet(QChar c){

@@ -38,7 +38,9 @@ https://tinyurl.com/q73okuc ), дата рождения,  дата смерти
 	если вдруг будет необходимо, чтобы работал только один модуль из двух)
 
 # Standalone .exe
+libgcc_s_seh-1.dll
 libstdc++-6.dll
+libwinpthread-1.dll
 Qt5Core.dll
 Qt5Gui.dll
 Qt5Sql.dll

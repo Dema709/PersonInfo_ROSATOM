@@ -11,6 +11,7 @@ DisplayDataWidget::DisplayDataWidget(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowTitle("Информация о человеке: вывод данных");//Название окна
+    resize(650, 300);
 
     QVBoxLayout * vLayout = new QVBoxLayout(this);
 
@@ -29,7 +30,7 @@ DisplayDataWidget::DisplayDataWidget(QWidget *parent) : QWidget(parent)
 }
 
 void DisplayDataWidget::closeEvent(QCloseEvent*){
-    qDebug()<<"DisplayDataWidget::closeEvent";
+    //qDebug()<<"DisplayDataWidget::closeEvent";
     emit firstWindow();
 }
 

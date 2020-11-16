@@ -140,11 +140,11 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         dataLayout->addWidget(ethnicComboBox);
 
         QStringList ethnicGroups = readEthnicGroups();
-        if (ethnicGroups.empty()){
-            QMessageBox::warning(this, tr("InsertDataWidget"),
+        if (ethnicGroups.empty() || (ethnicGroups.size()==1 && ethnicGroups[0].isEmpty())){
+            QMessageBox::critical(this, tr("InsertDataWidget"),
                                  tr("readEthnicGroups() returned empty QStringList\n"
                                     "Aborting..."));
-            Q_ASSERT(false);
+            abort();
         }
         ethnicComboBox->addItems(ethnicGroups);
     }
@@ -217,7 +217,7 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 }
 
 void InsertDataWidget::closeEvent(QCloseEvent*){
-    qDebug()<<"InsertDataWidget::closeEvent";
+    //qDebug()<<"InsertDataWidget::closeEvent";
     emit firstWindow();
 }
 
@@ -225,20 +225,21 @@ QStringList InsertDataWidget::readEthnicGroups(){
     using namespace std;
     ifstream fin("Ethnic_groups_in_Russia.txt");
     if (!fin.is_open()){
-        QMessageBox::warning(this, tr("InsertDataWidget"),
+        QMessageBox::critical(this, tr("InsertDataWidget"),
                              tr("readEthnicGroups() cannot open file\n"
                                 "Aborting..."));
-        Q_ASSERT(false);
+        abort();
         //Другие варианты:
-        /*
-        std::string errorString= "InsertDataWidget::readEthnicGroups() cannot open file";
-        throw std::runtime_error(errorString);
-        */
+        //Q_ASSERT перестаёт работать в релизной версии
+        //Q_ASSERT(false);
         /*
         Q_ASSERT_X(false, "InsertDataWidget",
                    "readEthnicGroups() cannot open file");
         */
-        //abort();
+        /*
+        std::string errorString= "InsertDataWidget::readEthnicGroups() cannot open file";
+        throw std::runtime_error(errorString);
+        */
     }
     //Не уверен, что лучше делать: продолжать ограниченную работу (например, выводу данных) или нет
     //Плюс говорят, что в Qt исключениями обычно не пользуются.

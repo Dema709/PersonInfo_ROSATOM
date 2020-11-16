@@ -21,9 +21,6 @@ private:
 
 signals:
     void firstWindow();  // Сигнал для первого окна на открытие
-
-private slots:
-    //void closePushButtonClicked();
 };
 
 #endif // DISPLAYDATAWIDGET_H

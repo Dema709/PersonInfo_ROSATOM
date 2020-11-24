@@ -18,6 +18,8 @@
 #include <fstream> //readEthnicGroups
 #include <algorithm> //readEthnicGroups
 #include <stdexcept>//исключения
+#include <QFile> //readEthnicGroups new
+//#include <QTextCodec> //readEthnicGroups new
 
 InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
 {
@@ -198,12 +200,25 @@ InsertDataWidget::InsertDataWidget(QWidget *parent) : QWidget(parent)
         QHBoxLayout * buttonsLayout = new QHBoxLayout();
         vLayout->addLayout(buttonsLayout);
 
-        QPushButton * saveDataPushButton = new QPushButton("Сохранить информацию\n"
-                                                           "о человеке");
+        QString saveDataText, closeText;
+#ifdef __ANDROID__
+    saveDataText = "Сохранить\n"
+                   "информацию\n"
+                   "о человеке";
+    closeText = "Вернуться\n"
+                "к выбору\n"
+                "действий";
+#else
+    saveDataText = "Сохранить информацию\n"
+                   "о человеке";
+    closeText = "Вернуться к выбору действий";
+#endif
+
+        QPushButton * saveDataPushButton = new QPushButton(saveDataText);
         buttonsLayout->addWidget(saveDataPushButton);
         connect(saveDataPushButton, SIGNAL(clicked()),SLOT(saveDataPushButtonClicked()));
 
-        QPushButton * closePushButton = new QPushButton("Вернуться к выбору действий");
+        QPushButton * closePushButton = new QPushButton(closeText);
         buttonsLayout->addWidget(closePushButton);
         connect(closePushButton, &QPushButton::clicked, this, &InsertDataWidget::close);
 
@@ -222,39 +237,28 @@ void InsertDataWidget::closeEvent(QCloseEvent*){
 }
 
 QStringList InsertDataWidget::readEthnicGroups(){
-    using namespace std;
-    ifstream fin("Ethnic_groups_in_Russia.txt");
-    if (!fin.is_open()){
+
+    QFile file(":/data/Ethnic_groups_in_Russia.txt");
+    if (!file.open(QIODevice::ReadOnly)){
         QMessageBox::critical(this, tr("InsertDataWidget"),
                              tr("readEthnicGroups() cannot open file\n"
                                 "Aborting..."));
         abort();
-        //Другие варианты:
-        //Q_ASSERT перестаёт работать в релизной версии
-        //Q_ASSERT(false);
-        /*
-        Q_ASSERT_X(false, "InsertDataWidget",
-                   "readEthnicGroups() cannot open file");
-        */
-        /*
-        std::string errorString= "InsertDataWidget::readEthnicGroups() cannot open file";
-        throw std::runtime_error(errorString);
-        */
+        //Не уверен, что лучше делать: продолжать ограниченную работу (например, вывод данных) или нет
+        //Плюс говорят, что в Qt исключениями обычно не пользуются.
     }
-    //Не уверен, что лучше делать: продолжать ограниченную работу (например, выводу данных) или нет
-    //Плюс говорят, что в Qt исключениями обычно не пользуются.
 
     QStringList answer;
-    string tempString;
-
-    while (getline(fin, tempString)){
-        answer += QString::fromStdString(tempString);
+    QTextStream fin(&file);
+    fin.setCodec("UTF-8");//Для корректного отображения кириллицы
+    while (!fin.atEnd()){
+        answer += fin.readLine();
     }
 
     //Сортировка по алфавиту всех элементов кроме первого (самый часто встречающийся - "Русские")
     //и последнего ("Прочие")
     if (answer.size()>2){
-        sort(next(answer.begin()), prev(answer.end()));
+        std::sort(std::next(answer.begin()), std::prev(answer.end()));
     }
 
     return answer;

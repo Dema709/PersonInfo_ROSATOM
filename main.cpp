@@ -2,6 +2,8 @@
 
 #include <QApplication>
 
+#include <QResource>//temp
+
 #include "test_runner.h"
 
 int main(int argc, char *argv[])

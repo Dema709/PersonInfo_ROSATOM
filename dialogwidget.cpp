@@ -12,11 +12,26 @@ DialogWidget::DialogWidget(QWidget *parent)
 {
     setWindowTitle("Информация о человеке: выбор действия");//Название окна
     QHBoxLayout * hLayout = new QHBoxLayout(this);
-    QPushButton * insertPushButton = new QPushButton("Ввод\n"
-                                                     "новых данных");
+
+    QString insertText, displayText;
+
+#ifdef __ANDROID__
+    insertText = "Ввод\n"
+                 "новых\n"
+                 "данных";
+    displayText = "Вывод\n"
+                  "хранящихся\n"
+                  "данных";
+#else
+    insertText = "Ввод\n"
+                 "новых данных";
+    displayText = "Вывод\n"
+                  "хранящихся данных";
+#endif
+
+    QPushButton * insertPushButton = new QPushButton(insertText);
     hLayout->addWidget(insertPushButton);
-    QPushButton * displayPushButton = new QPushButton("Вывод\n"
-                                                      "хранящихся данных");
+    QPushButton * displayPushButton = new QPushButton(displayText);
     hLayout->addWidget(displayPushButton);
 
     //Кнопки открытия виджетов ввода/вывода

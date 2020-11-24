@@ -27,3 +27,8 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+ANDROID_ABIS = arm64-v8a
+
+RESOURCES += \
+    res.qrc

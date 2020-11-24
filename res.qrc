@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/data">
+        <file>Ethnic_groups_in_Russia.txt</file>
+    </qresource>
+</RCC>
